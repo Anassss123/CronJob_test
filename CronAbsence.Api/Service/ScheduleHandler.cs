@@ -23,16 +23,22 @@ namespace CronAbsence.Api.Service
             {
                 _logger.LogInformation("ProcessAsync is starting.");
 
-                // Specify the path to your .xls file
+                // // Specify the path to your .xls file
                 string filePath = "C:\\Users\\Anas.HAMRAOUI\\Downloads\\TestFiles";
 
-                // Open the file using FileInfo
+                // // Open the file using FileInfo
                 FileInfo fileInfo = new FileInfo(filePath);
 
-                // Use the Excel reader service to read data from the file
+                // // Use the Excel reader service to read data from the file
                 var data = await _excelReaderService.ReadDataAsync(fileInfo).ConfigureAwait(false);
 
-                // Process the extracted data as needed
+                // // Display the extracted data
+                var dataTable = _excelReaderService.ReadData(fileInfo);
+                _excelReaderService.DisplayDataAsync(dataTable);
+
+                // // Process the extracted data as needed
+                
+
 
                 _logger.LogInformation("ProcessAsync completed successfully.");
             }
