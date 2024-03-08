@@ -1,0 +1,12 @@
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\bin\Debug\net7.0\CronAbsence.Domain.deps.json
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\bin\Debug\net7.0\CronAbsence.Domain.dll
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\bin\Debug\net7.0\CronAbsence.Domain.pdb
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\obj\Debug\net7.0\CronAbsence.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\obj\Debug\net7.0\CronAbsence.Domain.AssemblyInfoInputs.cache
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\obj\Debug\net7.0\CronAbsence.Domain.AssemblyInfo.cs
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\obj\Debug\net7.0\CronAbsence.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\obj\Debug\net7.0\CronAbsence.Domain.dll
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\obj\Debug\net7.0\refint\CronAbsence.Domain.dll
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\obj\Debug\net7.0\CronAbsence.Domain.pdb
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\obj\Debug\net7.0\ref\CronAbsence.Domain.dll
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Domain\obj\Debug\net7.0\CronAbsence.Domain.csproj.AssemblyReference.cache

@@ -1,0 +1,223 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Api\\CronAbsence.Api.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Api\\CronAbsence.Api.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Api\\CronAbsence.Api.csproj",
+        "projectName": "CronAbsence.Api",
+        "projectPath": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Api\\CronAbsence.Api.csproj",
+        "packagesPath": "C:\\Users\\Anas.HAMRAOUI\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Api\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Anas.HAMRAOUI\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Domain\\CronAbsence.Domain.csproj": {
+                "projectPath": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Domain\\CronAbsence.Domain.csproj"
+              },
+              "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Infrastructure\\CronAbsence.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Infrastructure\\CronAbsence.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Hangfire": {
+              "target": "Package",
+              "version": "[1.8.11, )"
+            },
+            "Hangfire.Core": {
+              "target": "Package",
+              "version": "[1.8.11, )"
+            },
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[7.0.16, )"
+            },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Serilog": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "Serilog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Domain\\CronAbsence.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Domain\\CronAbsence.Domain.csproj",
+        "projectName": "CronAbsence.Domain",
+        "projectPath": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Domain\\CronAbsence.Domain.csproj",
+        "packagesPath": "C:\\Users\\Anas.HAMRAOUI\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Anas.HAMRAOUI\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "EPPlus": {
+              "target": "Package",
+              "version": "[7.0.9, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Infrastructure\\CronAbsence.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Infrastructure\\CronAbsence.Infrastructure.csproj",
+        "projectName": "CronAbsence.Infrastructure",
+        "projectPath": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Infrastructure\\CronAbsence.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Anas.HAMRAOUI\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Anas.HAMRAOUI\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Domain\\CronAbsence.Domain.csproj": {
+                "projectPath": "C:\\Users\\Anas.HAMRAOUI\\OneDrive - Akkodis\\Documents\\PFE\\CronAbsence\\CronAbsence.Domain\\CronAbsence.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "EPPlus": {
+              "target": "Package",
+              "version": "[7.0.9, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

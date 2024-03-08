@@ -1,0 +1,15 @@
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\bin\Debug\net7.0\CronAbsence.Infrastructure.deps.json
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\bin\Debug\net7.0\CronAbsence.Infrastructure.dll
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\bin\Debug\net7.0\CronAbsence.Infrastructure.pdb
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.AssemblyInfo.cs
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.dll
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\refint\CronAbsence.Infrastructure.dll
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.pdb
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\ref\CronAbsence.Infrastructure.dll
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\bin\Debug\net7.0\CronAbsence.Domain.dll
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\bin\Debug\net7.0\CronAbsence.Domain.pdb
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.csproj.CopyComplete
