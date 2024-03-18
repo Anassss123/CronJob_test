@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 
-namespace CronAbsence.Infrastructure.Excel
+namespace CronAbsence.Infrastructure.Service.Excel
 {
     public class ExcelReaderService : IExcelReaderService
     {
