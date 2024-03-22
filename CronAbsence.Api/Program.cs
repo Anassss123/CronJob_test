@@ -39,14 +39,6 @@ using (var scope = app.Services.CreateScope())
         var dbContext = services.GetRequiredService<DataContext>();
         dbContext.Database.EnsureCreated(); // Ensures that the database exists. Note: This method is typically used for development and not recommended for production.
         Console.WriteLine("Connected successfully to the database.");
-
-        // // Appel de la fonction AddRandomData
-        //var randomDataGenerator = new RandomDataGenerator();
-        // var randomCatAbsenceStatutGenerator = new RandomCatAbsenceStatutGenerator();
-        // randomCatAbsenceStatutGenerator.AddRandomData(dbContext);
-        //randomDataGenerator.AddRandomData(dbContext);
-
-        // randomDataGenerator.AddRandomData(dbContext);
         dbContext.SaveChanges();
     }
     catch (Exception ex)
@@ -75,48 +67,3 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
-
-
-// public class RandomDataGenerator
-// {
-//     public void AddRandomData(DataContext dbContext)
-//     {
-//         // Generate and add random data to your DbContext here
-//         // Example:
-//         var random = new Random();
-//         for (int i = 0; i < 10; i++)
-//         {
-//             Console.WriteLine("done");
-//             dbContext.Cat_absence.Add(new CatAbsence
-//             {
-//                 Matricule = random.Next(1000, 9999),
-//                 Nom = "RandomNom" + i,
-//                 Prenom = "RandomPrenom" + i,
-//                 DateAbsence = DateTime.Now.AddDays(-random.Next(1, 30)),
-//                 AbsenceStatutId = random.Next(1, 5),
-//                 LastUpdate = DateTime.Now,
-//                 UpdateFlag = false,
-//                 Type = "RandomType" + i
-//             });
-//         }
-//     }
-// }
-
-
-// public class RandomCatAbsenceStatutGenerator
-// {
-//     public void AddRandomData(DataContext dbContext)
-//     {
-//         // Generate and add random data to your DbContext here
-//         // Example:
-//         var random = new Random();
-//         for (int i = 0; i < 10; i++)
-//         {
-//             Console.WriteLine("done");
-//             dbContext.Cat_absence_statut.Add(new CatAbsenceStatut
-//             {
-//                 Libelle = "RandomLibelle" + i
-//             });
-//         }
-//     }
-// }

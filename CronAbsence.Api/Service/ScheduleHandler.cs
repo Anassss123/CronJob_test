@@ -1,85 +1,49 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using CronAbsence.Infrastructure.Service.Data;
 using CronAbsence.Infrastructure.Service.Excel;
-using CronAbsence.Domain.Models;
 using CronAbsence.Infrastructure.Service.Process;
-using Serilog;
-using System.Data.Common;
-using System.Text;
-using static CronAbsence.Infrastructure.Service.Data.DatabaseReaderService;
+using System;
+using System.Threading.Tasks;
 
 namespace CronAbsence.Api.Service
 {
     public class ScheduleHandler : IScheduleHandler
     {
-        private readonly ILogger<ScheduleHandler> _logger;
         private readonly IExcelReaderService _excelReaderService;
-        private readonly IDatabaseReaderService _databaseReaderService;
-        // private readonly IDataComparer _dataComparer;
-        // private readonly IDataProcessor _dataProcessor;
+        private readonly IDataComparer _dataComparer;
 
-         public ScheduleHandler(ILogger<ScheduleHandler> logger, IDatabaseReaderService databaseReaderService, IExcelReaderService excelReaderService)
+        public ScheduleHandler(IExcelReaderService excelReaderService, IDataComparer dataComparer)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _excelReaderService = excelReaderService ?? throw new ArgumentNullException(nameof(excelReaderService));
-            _databaseReaderService = databaseReaderService ?? throw new ArgumentNullException(nameof(databaseReaderService));
-            // _dataComparer = dataComparer ?? throw new ArgumentNullException(nameof(dataComparer));
-            // _dataProcessor = dataProcessor ?? throw new ArgumentNullException(nameof(dataProcessor));
+            _excelReaderService = excelReaderService;
+            _dataComparer = dataComparer;
         }
 
         public async Task ProcessAsync()
         {
             try
             {
-                _logger.LogInformation("ProcessAsync is starting.");
+                Console.WriteLine("ProcessAsync is starting.");
 
-                // // Specify the path to your .xls file
-                string filePath = "C:\\Users\\Anas.HAMRAOUI\\Downloads\\TestFiles";
+                // FTP Configuration
+                string ftpServer = "ftp.example.com";
+                string ftpUsername = "username";
+                string ftpPassword = "password";
+                string remoteFilePath = "/path/to/excel.xlsx";
+                string localFilePath = "C:/temp/excel.xlsx";
 
-                // // Open the file using FileInfo
-                FileInfo fileInfo = new FileInfo(filePath);
+                // Read Excel data from FTP
+                var excelData = await _excelReaderService.ReadDataAsync(ftpServer, ftpUsername, ftpPassword, remoteFilePath, localFilePath );
 
-                // // Use the Excel reader service to read data from the file
-                var data = await _excelReaderService.ReadDataAsync(fileInfo).ConfigureAwait(false);
+                // Compare Excel data with database data
+                var updatedData = await _dataComparer.CompareDataAsync(excelData);
 
-                // //Display the extracted data
-                var dataTable = _excelReaderService.ReadData(fileInfo);
-                _excelReaderService.DisplayDataAsync(dataTable);
+                // Send updated data to PPM API (implement this)
 
-                // // Extract data from the database
-                // var dbCatAbsences = await _databaseReaderService.GetCatAbsencesAsync();
-                var dbCatAbsenceStatuts = await _databaseReaderService.GetCatAbsenceStatutsAsync();
-                var catAbsenceTable = await _databaseReaderService.GetCatAbsencesTableAsync();
-
-                LogDatabaseData(catAbsenceTable);
-
-                // // Compare data from the database with data from Excel
-                // var updatedData = CompareData(dbCatAbsences, data);
-
-                // // Process the updated data as needed
-                // ProcessUpdatedData(updatedData);
-
-                _logger.LogInformation("ProcessAsync completed successfully.");
+                Console.WriteLine("ProcessAsync completed successfully.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred in ProcessAsync.");
+                Console.WriteLine($"Error occurred in ProcessAsync: {ex.Message}");
             }
         }
-        private void LogDatabaseData(DatabaseReaderService.CatAbsenceTable catAbsenceTable)
-        {
-            _logger.LogInformation("Logging CatAbsence database data:");
-
-            foreach (var catAbsence in catAbsenceTable.Absences)
-            {
-                _logger.LogInformation($"Id: {catAbsence.Id}, Matricule: {catAbsence.Matricule}, Nom: {catAbsence.Nom}, Prenom: {catAbsence.Prenom}, DateAbsence: {catAbsence.DateAbsence}, AbsenceStatutId: {catAbsence.AbsenceStatutId}, LastUpdate: {catAbsence.LastUpdate}, UpdateFlag: {catAbsence.UpdateFlag}, Type: {catAbsence.Type}");
-            }
-        }
-
     }
 }

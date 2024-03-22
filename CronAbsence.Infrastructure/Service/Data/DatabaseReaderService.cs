@@ -1,33 +1,27 @@
 using CronAbsence.Domain.Models;
-using CronAbsence.Infrastructure.Configuration;
-using Microsoft.EntityFrameworkCore;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-    namespace CronAbsence.Infrastructure.Service.Data
+namespace CronAbsence.Infrastructure.Service.Data
 {
     public class DatabaseReaderService : IDatabaseReaderService
     {
-        private readonly DataContext _context;
+        private readonly string _connectionString;
 
-        public DatabaseReaderService(DataContext context)
+        public DatabaseReaderService(string connectionString)
         {
-            _context = context;
+            _connectionString = connectionString;
         }
 
-        public async Task<CatAbsenceTable> GetCatAbsencesTableAsync()
+        public async Task<IEnumerable<CatAbsence>> GetCatAbsencesAsync()
         {
-            var absences = await _context.Cat_absence.ToListAsync();
-            return new CatAbsenceTable { Absences = absences };
-        }
-
-        public async Task<List<CatAbsenceStatut>> GetCatAbsenceStatutsAsync()
-        {
-            return await _context.Cat_absence_statut.ToListAsync();
-        }
-
-        public class CatAbsenceTable
-        {
-            public List<CatAbsence> Absences { get; set; }
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                return await connection.QueryAsync<CatAbsence>("SELECT * FROM Cat_absence");
+            }
         }
     }
 }
-
