@@ -1,5 +1,11 @@
-
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CronAbsence.Api.Service;
+using CronAbsence.Infrastructure.Service.Data;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace CronAbsence.Api.Schedule
 {
@@ -7,37 +13,26 @@ namespace CronAbsence.Api.Schedule
     {
         private readonly ILogger<ScheduleJobService> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IHostApplicationLifetime _applicationLifetime;
 
-        public ScheduleJobService(ILogger<ScheduleJobService> logger, IServiceProvider serviceProvider, IHostApplicationLifetime applicationLifetime)
+        public ScheduleJobService(ILogger<ScheduleJobService> logger, IServiceProvider serviceProvider)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-            _applicationLifetime = applicationLifetime ?? throw new ArgumentNullException(nameof(applicationLifetime));
+            _logger = logger;
+            _serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            await StartProcessAsync(stoppingToken);
-        }
-
-        private async Task StartProcessAsync(CancellationToken stoppingToken)
         {
             try
             {
                 _logger.LogInformation("ScheduleJobService is starting.");
 
-                while (!stoppingToken.IsCancellationRequested)
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    // Resolve the scoped service within the method where it's needed
-                    using (var scope = _serviceProvider.CreateScope())
-                    {
-                        var scheduleHandler = scope.ServiceProvider.GetRequiredService<IScheduleHandler>();
-                        await scheduleHandler.ProcessAsync();
-                    }
-
-                    await Task.Delay(1000, stoppingToken);
+                    var scheduleHandler = scope.ServiceProvider.GetRequiredService<IScheduleHandler>();
+                    await scheduleHandler.ProcessAsync();
                 }
+
+                _logger.LogInformation("ScheduleJobService completed successfully.");
             }
             catch (Exception ex)
             {

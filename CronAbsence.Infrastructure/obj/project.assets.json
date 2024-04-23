@@ -46,6 +46,19 @@
           }
         }
       },
+      "CsvHelper/31.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/CsvHelper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/CsvHelper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Dapper/2.1.35": {
         "type": "package",
         "compile": {
@@ -115,7 +128,7 @@
           "lib/net7.0/EPPlus.System.Drawing.dll": {}
         }
       },
-      "FluentFTP/49.0.2": {
+      "FluentFTP/50.0.1": {
         "type": "package",
         "compile": {
           "lib/net6.0/FluentFTP.dll": {
@@ -1461,6 +1474,19 @@
           "runtimes/win7-x86/native/sni.dll": {
             "assetType": "native",
             "rid": "win7-x86"
+          }
+        }
+      },
+      "SSH.NET/2024.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/Renci.SshNet.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Renci.SshNet.dll": {
+            "related": ".xml"
           }
         }
       },
@@ -2940,6 +2966,34 @@
         "lib/netstandard2.0/Azure.Identity.xml"
       ]
     },
+    "CsvHelper/31.0.4": {
+      "sha512": "m4ikjUAn4XOD1tShxxk4ui42sHxjHdX52P7fPQ9K7tzJkPTEwiCbvEz3k73mTGSSaPTUCOp9VziQC757IqKLew==",
+      "type": "package",
+      "path": "csvhelper/31.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "csvhelper.31.0.4.nupkg.sha512",
+        "csvhelper.nuspec",
+        "lib/net462/CsvHelper.dll",
+        "lib/net462/CsvHelper.xml",
+        "lib/net47/CsvHelper.dll",
+        "lib/net47/CsvHelper.xml",
+        "lib/net48/CsvHelper.dll",
+        "lib/net48/CsvHelper.xml",
+        "lib/net6.0/CsvHelper.dll",
+        "lib/net6.0/CsvHelper.xml",
+        "lib/net7.0/CsvHelper.dll",
+        "lib/net7.0/CsvHelper.xml",
+        "lib/net8.0/CsvHelper.dll",
+        "lib/net8.0/CsvHelper.xml",
+        "lib/netstandard2.0/CsvHelper.dll",
+        "lib/netstandard2.0/CsvHelper.xml",
+        "lib/netstandard2.1/CsvHelper.dll",
+        "lib/netstandard2.1/CsvHelper.xml"
+      ]
+    },
     "Dapper/2.1.35": {
       "sha512": "YKRwjVfrG7GYOovlGyQoMvr1/IJdn+7QzNXJxyMh0YfFF5yvDmTYaJOVYWsckreNjGsGSEtrMTpnzxTUq/tZQw==",
       "type": "package",
@@ -3044,15 +3098,15 @@
         "readme.md"
       ]
     },
-    "FluentFTP/49.0.2": {
-      "sha512": "wc3NzrKoUwEcbAvyF3/VKi1DQfjZwmxKpvfCEjPEYD5Xqm7dyeDlDGQoIy7JtNP0S7yFU6P3Lc6Oo9TT4/CMMQ==",
+    "FluentFTP/50.0.1": {
+      "sha512": "iNG+wYZcBoOQmnrgR0EzUU1KHy3mOG/osGcd+bZMDcTC45tTLR45o0uInKd74t669d1JhGHBTzZKpSQOxBSisg==",
       "type": "package",
-      "path": "fluentftp/49.0.2",
+      "path": "fluentftp/50.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.TXT",
-        "fluentftp.49.0.2.nupkg.sha512",
+        "fluentftp.50.0.1.nupkg.sha512",
         "fluentftp.nuspec",
         "lib/net462/FluentFTP.dll",
         "lib/net462/FluentFTP.xml",
@@ -5043,6 +5097,31 @@
         "runtime.win7-x86.runtime.native.system.data.sqlclient.sni.4.0.1.nupkg.sha512",
         "runtime.win7-x86.runtime.native.system.data.sqlclient.sni.nuspec",
         "runtimes/win7-x86/native/sni.dll"
+      ]
+    },
+    "SSH.NET/2024.0.0": {
+      "sha512": "klFPBbrGtFY9V8kbh5PQwlexj7Z8fwbpwABvLX0QzCmzW06rkLknEeM1l6np2hkUfg5an5w/GzHUhWTHN1TJpA==",
+      "type": "package",
+      "path": "ssh.net/2024.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "SS-NET-icon-h500.png",
+        "lib/net462/Renci.SshNet.dll",
+        "lib/net462/Renci.SshNet.xml",
+        "lib/net6.0/Renci.SshNet.dll",
+        "lib/net6.0/Renci.SshNet.xml",
+        "lib/net7.0/Renci.SshNet.dll",
+        "lib/net7.0/Renci.SshNet.xml",
+        "lib/net8.0/Renci.SshNet.dll",
+        "lib/net8.0/Renci.SshNet.xml",
+        "lib/netstandard2.0/Renci.SshNet.dll",
+        "lib/netstandard2.0/Renci.SshNet.xml",
+        "lib/netstandard2.1/Renci.SshNet.dll",
+        "lib/netstandard2.1/Renci.SshNet.xml",
+        "ssh.net.2024.0.0.nupkg.sha512",
+        "ssh.net.nuspec"
       ]
     },
     "Std.UriTemplate/0.0.50": {
@@ -8497,16 +8576,18 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "CronAbsence.Domain >= 1.0.0",
+      "CsvHelper >= 31.0.4",
       "Dapper >= 2.1.35",
       "Dapper.SqlBuilder >= 2.0.78",
       "EPPlus >= 7.0.9",
-      "FluentFTP >= 49.0.2",
+      "FluentFTP >= 50.0.1",
       "Microsoft.Data.SqlClient >= 5.2.0",
       "Microsoft.EntityFrameworkCore >= 7.0.16",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.16",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.16",
       "Microsoft.Extensions.Hosting >= 8.0.0",
       "Microsoft.Graph >= 5.44.0",
+      "SSH.NET >= 2024.0.0",
       "System.Data.SqlClient >= 4.1.0"
     ]
   },
@@ -8551,6 +8632,10 @@
       "net7.0": {
         "targetAlias": "net7.0",
         "dependencies": {
+          "CsvHelper": {
+            "target": "Package",
+            "version": "[31.0.4, )"
+          },
           "Dapper": {
             "target": "Package",
             "version": "[2.1.35, )"
@@ -8565,7 +8650,7 @@
           },
           "FluentFTP": {
             "target": "Package",
-            "version": "[49.0.2, )"
+            "version": "[50.0.1, )"
           },
           "Microsoft.Data.SqlClient": {
             "target": "Package",
@@ -8593,6 +8678,10 @@
             "target": "Package",
             "version": "[5.44.0, )"
           },
+          "SSH.NET": {
+            "target": "Package",
+            "version": "[2024.0.0, )"
+          },
           "System.Data.SqlClient": {
             "target": "Package",
             "version": "[4.1.0, )"
@@ -8614,7 +8703,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.407\\RuntimeIdentifierGraph.json"
       }
     }
   }

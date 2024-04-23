@@ -45,6 +45,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "CoreFTP": {
+              "target": "Package",
+              "version": "[1.4.0, )"
+            },
             "Faker.Net": {
               "target": "Package",
               "version": "[2.0.163, )"
@@ -68,6 +72,10 @@
             "Microsoft.Graph": {
               "target": "Package",
               "version": "[5.44.0, )"
+            },
+            "SSH.NET": {
+              "target": "Package",
+              "version": "[2024.0.0, )"
             },
             "Serilog": {
               "target": "Package",
@@ -101,7 +109,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -160,7 +168,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -202,6 +210,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "CsvHelper": {
+              "target": "Package",
+              "version": "[31.0.4, )"
+            },
             "Dapper": {
               "target": "Package",
               "version": "[2.1.35, )"
@@ -216,7 +228,7 @@
             },
             "FluentFTP": {
               "target": "Package",
-              "version": "[49.0.2, )"
+              "version": "[50.0.1, )"
             },
             "Microsoft.Data.SqlClient": {
               "target": "Package",
@@ -244,6 +256,10 @@
               "target": "Package",
               "version": "[5.44.0, )"
             },
+            "SSH.NET": {
+              "target": "Package",
+              "version": "[2024.0.0, )"
+            },
             "System.Data.SqlClient": {
               "target": "Package",
               "version": "[4.1.0, )"
@@ -265,7 +281,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     }

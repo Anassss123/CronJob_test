@@ -2,56 +2,61 @@ using System;
 using System.Data;
 using System.IO;
 using System.Threading.Tasks;
-using FluentFTP;
-using OfficeOpenXml;
 
 namespace CronAbsence.Infrastructure.Service.Excel
 {
     public class ExcelReaderService : IExcelReaderService
     {
-        public async Task<DataTable> ReadDataAsync(string ftpServer, string ftpUsername, string ftpPassword, string remoteFilePath, string localFilePath)
+        public async Task<DataTable> ReadDataAsync(string csvFilePath)
         {
             DataTable dataTable = new DataTable();
 
-            using (var ftp = new FtpClient(ftpServer, ftpUsername, ftpPassword))
+            try
             {
-                ftp.Connect();
-
-                // Download the Excel file to the local file path
-                ftp.DownloadFile(localFilePath, remoteFilePath);
-
-                // Read data from the downloaded file
-                using (var package = new ExcelPackage(new FileInfo(localFilePath)))
+                if (!File.Exists(csvFilePath))
                 {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-                    int rowCount = worksheet.Dimension.Rows;
-                    int colCount = worksheet.Dimension.Columns;
+                    throw new FileNotFoundException("CSV file not found at the specified path.", csvFilePath);
+                }
 
-                    // Add columns to the DataTable based on the number of columns in the Excel file
-                    for (int col = 1; col <= colCount; col++)
+                using (var reader = new StreamReader(csvFilePath))
+                {
+                    string line;
+                    bool isFirstLine = true;
+
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        dataTable.Columns.Add($"Column {col}");
-                    }
+                        string[] parts = line.Split(',');
 
-                    // Read data from Excel file and populate the DataTable
-                    for (int row = 1; row <= rowCount; row++)
-                    {
-                        DataRow dataRow = dataTable.NewRow();
-
-                        for (int col = 1; col <= colCount; col++)
+                        if (isFirstLine)
                         {
-                            dataRow[col - 1] = worksheet.Cells[row, col].Value?.ToString() ?? "NULL";
-                        }
+                            foreach (string header in parts)
+                            {
+                                dataTable.Columns.Add(header.Trim());
+                            }
 
-                        dataTable.Rows.Add(dataRow);
+                            isFirstLine = false;
+                        }
+                        else
+                        {
+                            DataRow dataRow = dataTable.NewRow();
+
+                            for (int i = 0; i < parts.Length; i++)
+                            {
+                                dataRow[i] = parts[i].Trim();
+                            }
+
+                            dataTable.Rows.Add(dataRow);
+                        }
                     }
                 }
 
-                // Disconnect from the FTP server
-                ftp.Disconnect();
+                return dataTable;
             }
-
-            return dataTable;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading CSV file: {ex.Message}");
+                throw;
+            }
         }
     }
 }
