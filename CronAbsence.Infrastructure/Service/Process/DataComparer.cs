@@ -18,47 +18,37 @@ namespace CronAbsence.Infrastructure.Service.Process
 
         public async Task InsertNewData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData)
         {
-            var newRecords = fileData.Where(f => !dbData.Any(d => d.Matricule == f.Matricule)).ToList();
-
-            // Remove LastUpdate for new entries
-            foreach (var newRecord in newRecords)
-            {
-                newRecord.LastUpdate = null;
-            }
+            var newRecords = fileData.Where(f => !dbData.Any(d =>
+                d.Matricule == f.Matricule &&
+                d.DateAbsence == f.DateAbsence &&
+                d.Type == f.Type)).ToList();
+            
+            // Set LastUpdate to NULL for new entries
+            newRecords.ForEach(record => record.LastUpdate = null);
 
             await _databaseReaderService.InsertCatAbsencesAsync(newRecords);
         }
 
         public async Task UpdateExistingData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData)
         {
-            var updatedRecords = fileData.Where(f => dbData.Any(d => d.Matricule == f.Matricule &&
-                                                                (d.Nom != f.Nom ||
-                                                                 d.Prenom != f.Prenom ||
-                                                                 d.DateAbsence != f.DateAbsence ||
-                                                                 d.AbsenceStatutId != f.AbsenceStatutId ||
-                                                                 d.Type != f.Type)))
-                                         .ToList();
-
-            // Set LastUpdate only when AbsenceStatutId changes
-            foreach (var updatedRecord in updatedRecords)
-            {
-                var matchingDbRecord = dbData.FirstOrDefault(d => d.Matricule == updatedRecord.Matricule);
-                if (matchingDbRecord != null && matchingDbRecord.AbsenceStatutId != updatedRecord.AbsenceStatutId)
-                {
-                    updatedRecord.LastUpdate = DateTime.Now;
-                }
-                else
-                {
-                    updatedRecord.LastUpdate = null; // No change, so remove LastUpdate
-                }
-            }
-
+            var updatedRecords = fileData.Where(f => dbData.Any(d =>
+                d.Matricule == f.Matricule &&
+                d.DateAbsence == f.DateAbsence &&
+                d.Type == f.Type &&
+                d.AbsenceStatutId != f.AbsenceStatutId))
+                .ToList();
+            
             await _databaseReaderService.UpdateCatAbsencesAsync(updatedRecords);
         }
 
         public async Task DeleteOldData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData)
         {
-            var deletedRecords = dbData.Where(d => !fileData.Any(f => f.Matricule == d.Matricule)).ToList();
+            var deletedRecords = dbData.Where(d => !fileData.Any(f =>
+                f.Matricule == d.Matricule &&
+                f.DateAbsence == d.DateAbsence &&
+                f.Type == d.Type))
+                .ToList();
+            
             await _databaseReaderService.DeleteCatAbsencesAsync(deletedRecords);
         }
     }
