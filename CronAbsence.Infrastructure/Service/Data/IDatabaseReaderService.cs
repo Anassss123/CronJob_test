@@ -7,6 +7,11 @@ namespace CronAbsence.Infrastructure.Service.Data
     public interface IDatabaseReaderService
     {
         Task<IEnumerable<CatAbsence>> GetCatAbsencesAsync();
-        Task UpdateCatAbsencesAsync(IEnumerable<CatAbsence> catAbsences);
+
+        Task InsertCatAbsencesAsync(IEnumerable<CatAbsence> newAbsences);
+
+        Task UpdateCatAbsencesAsync(IEnumerable<CatAbsence> updatedAbsences);
+
+        Task DeleteCatAbsencesAsync(IEnumerable<CatAbsence> deletedAbsences);
     }
 }

@@ -1,6 +1,6 @@
 using System;
-using System.Data;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using CronAbsence.Domain.Models;
 using CronAbsence.Infrastructure.Service.Data;
@@ -34,19 +34,20 @@ namespace CronAbsence.Api.Service
                 // Read data from CSV file
                 var csvData = await _excelReaderService.ReadDataAsync(csvFilePath);
 
+                // Convert CSV DataTable to CatAbsence list
+                var csvAbsences = ConvertDataTableToCatAbsenceList(csvData);
+
                 // Log the CSV data for verification
                 Console.WriteLine("CSV Data:");
                 LogDataTable(csvData);
 
-                // Compare data and get updated/new records
-                var updatedData = await _dataComparer.CompareDataAsync(csvData);
+                // Get data from the database
+                var dbData = await _databaseReaderService.GetCatAbsencesAsync();
 
-                // Log the updated data for verification
-                Console.WriteLine("Updated Data:");
-                LogCatAbsenceList(updatedData);
-
-                // Update CatAbsences in the database
-                await _databaseReaderService.UpdateCatAbsencesAsync(updatedData);
+                // Compare data and perform operations
+                await _dataComparer.InsertNewData(dbData, csvAbsences);
+                await _dataComparer.UpdateExistingData(dbData, csvAbsences);
+                await _dataComparer.DeleteOldData(dbData, csvAbsences);
 
                 Console.WriteLine("Processing completed successfully.");
             }
@@ -68,17 +69,23 @@ namespace CronAbsence.Api.Service
             }
         }
 
-        private void LogCatAbsenceList(IEnumerable<CatAbsence> catAbsences)
+        private List<CatAbsence> ConvertDataTableToCatAbsenceList(DataTable dataTable)
         {
-            foreach (var catAbsence in catAbsences)
+            var catAbsences = new List<CatAbsence>();
+            foreach (DataRow row in dataTable.Rows)
             {
-                Console.WriteLine($"Matricule: {catAbsence.Matricule}, " +
-                                  $"Nom: {catAbsence.Nom}, " +
-                                  $"Prenom: {catAbsence.Prenom}, " +
-                                  $"DateAbsence: {catAbsence.DateAbsence}, " +
-                                  $"AbsenceStatutId: {catAbsence.AbsenceStatutId}, " +
-                                  $"Type: {catAbsence.Type}");
+                var catAbsence = new CatAbsence
+                {
+                    Matricule = Convert.ToInt32(row["Matricule"]),
+                    Nom = row["Nom"].ToString(),
+                    Prenom = row["Prenom"].ToString(),
+                    DateAbsence = Convert.ToDateTime(row["DateAbsence"]),
+                    AbsenceStatutId = Convert.ToInt32(row["AbsenceStatutId"]),
+                    Type = row["Type"].ToString()
+                };
+                catAbsences.Add(catAbsence);
             }
+            return catAbsences;
         }
     }
 }

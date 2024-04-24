@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using CronAbsence.Domain.Models;
@@ -17,55 +16,50 @@ namespace CronAbsence.Infrastructure.Service.Process
             _databaseReaderService = databaseReaderService;
         }
 
-        public async Task<IEnumerable<CatAbsence>> CompareDataAsync(DataTable csvData)
+        public async Task InsertNewData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData)
         {
-            // Get existing CatAbsence records from the database
-            var dbCatAbsences = await _databaseReaderService.GetCatAbsencesAsync();
+            var newRecords = fileData.Where(f => !dbData.Any(d => d.Matricule == f.Matricule)).ToList();
 
-            // List to hold updated or new CatAbsence objects
-            var updatedDataList = new List<CatAbsence>();
-
-            // Iterate through each row in the CSV data
-            foreach (DataRow csvRow in csvData.Rows)
+            // Remove LastUpdate for new entries
+            foreach (var newRecord in newRecords)
             {
-                // Extract Matricule from the CSV row
-                var matricule = Convert.ToInt32(csvRow["Matricule"]);
+                newRecord.LastUpdate = null;
+            }
 
-                // Check if a CatAbsence with the same Matricule exists in the database
-                var dbAbsence = dbCatAbsences.FirstOrDefault(a => a.Matricule == matricule);
+            await _databaseReaderService.InsertCatAbsencesAsync(newRecords);
+        }
 
-                if (dbAbsence != null)
+        public async Task UpdateExistingData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData)
+        {
+            var updatedRecords = fileData.Where(f => dbData.Any(d => d.Matricule == f.Matricule &&
+                                                                (d.Nom != f.Nom ||
+                                                                 d.Prenom != f.Prenom ||
+                                                                 d.DateAbsence != f.DateAbsence ||
+                                                                 d.AbsenceStatutId != f.AbsenceStatutId ||
+                                                                 d.Type != f.Type)))
+                                         .ToList();
+
+            // Set LastUpdate only when AbsenceStatutId changes
+            foreach (var updatedRecord in updatedRecords)
+            {
+                var matchingDbRecord = dbData.FirstOrDefault(d => d.Matricule == updatedRecord.Matricule);
+                if (matchingDbRecord != null && matchingDbRecord.AbsenceStatutId != updatedRecord.AbsenceStatutId)
                 {
-                    // If CatAbsence exists, check if AbsenceStatutId has changed
-                    var newAbsenceStatutId = Convert.ToInt32(csvRow["AbsenceStatutId"]);
-                    if (dbAbsence.AbsenceStatutId != newAbsenceStatutId)
-                    {
-                        // If AbsenceStatutId has changed, update LastUpdated and AbsenceStatutId
-                        dbAbsence.AbsenceStatutId = newAbsenceStatutId;
-                        dbAbsence.LastUpdate = DateTime.Now;
-                        updatedDataList.Add(dbAbsence);
-                    }
+                    updatedRecord.LastUpdate = DateTime.Now;
                 }
                 else
                 {
-                    // If CatAbsence doesn't exist, create a new one with CSV data
-                    var newAbsence = new CatAbsence
-                    {
-                        Matricule = matricule,
-                        Nom = Convert.ToString(csvRow["Nom"]),
-                        Prenom = Convert.ToString(csvRow["Prenom"]),
-                        DateAbsence = Convert.ToDateTime(csvRow["DateAbsence"]),
-                        AbsenceStatutId = Convert.ToInt32(csvRow["AbsenceStatutId"]),
-                        Type = Convert.ToString(csvRow["Type"])
-                    };
-
-                    // Add the new CatAbsence to the list
-                    updatedDataList.Add(newAbsence);
+                    updatedRecord.LastUpdate = null; // No change, so remove LastUpdate
                 }
             }
 
-            // Return the list of updated or new CatAbsence objects
-            return updatedDataList;
+            await _databaseReaderService.UpdateCatAbsencesAsync(updatedRecords);
+        }
+
+        public async Task DeleteOldData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData)
+        {
+            var deletedRecords = dbData.Where(d => !fileData.Any(f => f.Matricule == d.Matricule)).ToList();
+            await _databaseReaderService.DeleteCatAbsencesAsync(deletedRecords);
         }
     }
 }
