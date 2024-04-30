@@ -25,7 +25,7 @@ namespace CronAbsence.Infrastructure.Service.Excel
 
                     while ((line = reader.ReadLine()) != null)
                     {
-                        string[] parts = line.Split(',');
+                        string[] parts = line.Split(';');
 
                         if (isFirstLine)
                         {

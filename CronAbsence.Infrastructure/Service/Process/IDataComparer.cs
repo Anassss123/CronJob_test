@@ -6,10 +6,10 @@ namespace CronAbsence.Infrastructure.Service.Process
 {
     public interface IDataComparer
     {
-        Task InsertNewData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData);
+        Task InsertNewAbsence(IEnumerable<CatAbsence> dbAbsence, IEnumerable<CatAbsence> fileAbsence);
 
-        Task UpdateExistingData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData);
+        Task UpdateExistingAbsence(IEnumerable<CatAbsence> dbAbsence, IEnumerable<CatAbsence> fileAbsence);
 
-        Task DeleteOldData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData);
+        Task CancelDeletedAbsence(IEnumerable<CatAbsence> dbAbsence, IEnumerable<CatAbsence> fileAbsence);
     }
 }

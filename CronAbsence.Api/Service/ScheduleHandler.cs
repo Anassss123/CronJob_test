@@ -35,19 +35,23 @@ namespace CronAbsence.Api.Service
                 var csvData = await _excelReaderService.ReadDataAsync(csvFilePath);
 
                 // Convert CSV DataTable to CatAbsence list
-                var csvAbsences = ConvertDataTableToCatAbsenceList(csvData);
+                var fileAbsences = ConvertDataTableToCatAbsenceList(csvData);
 
                 // Log the CSV data for verification
                 Console.WriteLine("CSV Data:");
-                LogDataTable(csvData);
+                LogCatAbsences(fileAbsences);
 
                 // Get data from the database
-                var dbData = await _databaseReaderService.GetCatAbsencesAsync();
+                var dbAbsence = await _databaseReaderService.GetCatAbsencesAsync();
 
                 // Compare data and perform operations
-                await _dataComparer.InsertNewData(dbData, csvAbsences);
-                await _dataComparer.UpdateExistingData(dbData, csvAbsences);
-                await _dataComparer.DeleteOldData(dbData, csvAbsences);
+                await _dataComparer.InsertNewAbsence(dbAbsence, fileAbsences);
+                await _dataComparer.UpdateExistingAbsence(dbAbsence, fileAbsences);
+                await _dataComparer.CancelDeletedAbsence(dbAbsence, fileAbsences);
+
+                // archivage
+
+                // PPM Api
 
                 Console.WriteLine("Processing completed successfully.");
             }
@@ -57,35 +61,53 @@ namespace CronAbsence.Api.Service
             }
         }
 
-        private void LogDataTable(DataTable dataTable)
+        private void LogCatAbsences(IEnumerable<CatAbsence> catAbsences)
         {
-            foreach (DataRow row in dataTable.Rows)
+            foreach (var absence in catAbsences)
             {
-                foreach (DataColumn col in dataTable.Columns)
-                {
-                    Console.Write($"{col.ColumnName}: {row[col]} | ");
-                }
-                Console.WriteLine();
+                Console.WriteLine($"Matricule: {absence.Matricule} | Nom: {absence.Nom} | Prenom: {absence.Prenom} | Date: {absence.Date} | Type: {absence.Type} | Debut: {absence.Debut} | Fin: {absence.Fin} | Motif: {absence.Motif} | Flag: {absence.Flag}");
             }
         }
 
         private List<CatAbsence> ConvertDataTableToCatAbsenceList(DataTable dataTable)
         {
             var catAbsences = new List<CatAbsence>();
+            int idCounter = 1; // Start ID counter from 1
+
             foreach (DataRow row in dataTable.Rows)
             {
                 var catAbsence = new CatAbsence
                 {
+                    ID = idCounter++,
                     Matricule = Convert.ToInt32(row["Matricule"]),
                     Nom = row["Nom"].ToString(),
                     Prenom = row["Prenom"].ToString(),
-                    DateAbsence = Convert.ToDateTime(row["DateAbsence"]),
-                    AbsenceStatutId = Convert.ToInt32(row["AbsenceStatutId"]),
-                    Type = row["Type"].ToString()
+                    Date = DateTime.ParseExact(row["Date"].ToString(), "dd/MM/yyyy", null),
+                    Type = ParseType(row["Nombre Heures"].ToString()), 
+                    Debut = row["Debut"].ToString(),
+                    Fin = row["Fin"].ToString(),
+                    Motif = row["Motif"].ToString().Equals("REPOS ASTREINTE", StringComparison.InvariantCultureIgnoreCase) ? "REPOS ASTREINTE" : "ABSENCE",
+                    
                 };
+
                 catAbsences.Add(catAbsence);
             }
             return catAbsences;
+        }
+
+
+        private int ParseType(string nombreHeures)
+        {
+            // Logic to parse "Nombre Heures" to Type
+            
+            if (nombreHeures.StartsWith("J"))
+                return 3;
+            else if (nombreHeures.StartsWith("M"))
+                return 1;
+            else if (nombreHeures.StartsWith("A"))
+                return 2;
+             else
+                throw new ArgumentException("Invalid value for Nombre Heures");// Other values 
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -38,16 +39,20 @@ namespace CronAbsence.Infrastructure.Service.Data
                 foreach (var absence in newAbsences)
                 {
                     await connection.ExecuteAsync(
-                        @"INSERT INTO Cat_absence (Matricule, Nom, Prenom, DateAbsence, AbsenceStatutId, Type, LastUpdate) 
-                          VALUES (@Matricule, @Nom, @Prenom, @DateAbsence, @AbsenceStatutId, @Type, NULL)",
+                        @"INSERT INTO Cat_absence (ID,Matricule, Nom, Prenom, Date, Type, Debut, Fin, Motif, Flag) 
+                          VALUES (@ID,@Matricule, @Nom, @Prenom, @Date, @Type, @Debut, @Fin, @Motif, @Flag)",
                         new
                         {
+                            absence.ID,
                             absence.Matricule,
                             absence.Nom,
                             absence.Prenom,
-                            absence.DateAbsence,
-                            absence.AbsenceStatutId,
-                            absence.Type
+                            absence.Date,
+                            absence.Type,
+                            absence.Debut,
+                            absence.Fin,
+                            absence.Motif,
+                            absence.Flag
                         });
                 }
             }
@@ -65,22 +70,29 @@ namespace CronAbsence.Infrastructure.Service.Data
                 {
                     await connection.ExecuteAsync(
                         @"UPDATE Cat_absence 
-                          SET Nom = @Nom, 
-                              Prenom = @Prenom, 
-                              DateAbsence = @DateAbsence, 
-                              AbsenceStatutId = @AbsenceStatutId, 
-                              Type = @Type, 
-                              LastUpdate = @dateNow
-                          WHERE Matricule = @Matricule",
+                        SET Nom = @Nom, 
+                            Prenom = @Prenom, 
+                            Type = @Type, 
+                            Debut = @Debut, 
+                            Fin = @Fin, 
+                            Motif = @Motif, 
+                            Flag = @Flag,
+                            LastUpdated = @dateNow
+                        WHERE Matricule = @Matricule
+                        AND Date = @Date
+                        AND Motif = @Motif",
                         new
                         {
                             absence.Nom,
                             absence.Prenom,
-                            absence.DateAbsence,
-                            absence.AbsenceStatutId,
                             absence.Type,
+                            absence.Debut,
+                            absence.Fin,
+                            absence.Motif,
+                            absence.Flag,
                             dateNow = DateTime.Now,
-                            absence.Matricule
+                            absence.Matricule,
+                            absence.Date
                         });
                 }
             }

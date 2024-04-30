@@ -16,37 +16,38 @@ namespace CronAbsence.Infrastructure.Service.Process
             _databaseReaderService = databaseReaderService;
         }
 
-        public async Task InsertNewData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData)
+        public async Task InsertNewAbsence(IEnumerable<CatAbsence> dbAbsence, IEnumerable<CatAbsence> fileAbsence)
         {
-            var newRecords = fileData.Where(f => !dbData.Any(d =>
-                d.Matricule == f.Matricule &&
-                d.DateAbsence == f.DateAbsence &&
-                d.Type == f.Type)).ToList();
+            var newRecords = fileAbsence.Where(fa => !dbAbsence.Any(da =>
+                da.Matricule == fa.Matricule &&
+                da.Date == fa.Date &&
+                da.Motif == fa.Motif)).ToList();
             
             // Set LastUpdate to NULL for new entries
-            newRecords.ForEach(record => record.LastUpdate = null);
+            newRecords.ForEach(record => record.Debut = null);
+            newRecords.ForEach(record => record.Fin = null);
 
             await _databaseReaderService.InsertCatAbsencesAsync(newRecords);
         }
 
-        public async Task UpdateExistingData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData)
+        public async Task UpdateExistingAbsence(IEnumerable<CatAbsence> dbAbsence, IEnumerable<CatAbsence> fileAbsence)
         {
-            var updatedRecords = fileData.Where(f => dbData.Any(d =>
-                d.Matricule == f.Matricule &&
-                d.DateAbsence == f.DateAbsence &&
-                d.Type == f.Type &&
-                d.AbsenceStatutId != f.AbsenceStatutId))
+            var updatedRecords = fileAbsence.Where(fa => dbAbsence.Any(da =>
+                da.Matricule == fa.Matricule &&
+                da.Date == fa.Date &&
+                da.Motif == fa.Motif &&
+                da.Type != fa.Type))
                 .ToList();
             
             await _databaseReaderService.UpdateCatAbsencesAsync(updatedRecords);
         }
 
-        public async Task DeleteOldData(IEnumerable<CatAbsence> dbData, IEnumerable<CatAbsence> fileData)
+        public async Task CancelDeletedAbsence(IEnumerable<CatAbsence> dbAbsence, IEnumerable<CatAbsence> fileAbsence)
         {
-            var deletedRecords = dbData.Where(d => !fileData.Any(f =>
-                f.Matricule == d.Matricule &&
-                f.DateAbsence == d.DateAbsence &&
-                f.Type == d.Type))
+            var deletedRecords = dbAbsence.Where(da => !fileAbsence.Any(fa =>
+                fa.Matricule == da.Matricule &&
+                fa.Date == da.Date &&
+                fa.Motif == da.Motif))
                 .ToList();
             
             await _databaseReaderService.DeleteCatAbsencesAsync(deletedRecords);
