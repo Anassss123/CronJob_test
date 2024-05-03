@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using CronAbsence.Domain.Models;
 using CronAbsence.Infrastructure.Service.Data;
 using CronAbsence.Infrastructure.Service.Excel;
 using CronAbsence.Infrastructure.Service.Process;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 
 namespace CronAbsence.Api.Service
 {
@@ -17,13 +20,15 @@ namespace CronAbsence.Api.Service
         private readonly IDataComparer _dataComparer;
         private readonly IDatabaseReaderService _databaseReaderService;
         private readonly string _connectionString;
+        private readonly IConfiguration _configuration;
 
-        public ScheduleHandler(IExcelReaderService excelReaderService, IDataComparer dataComparer, IDatabaseReaderService databaseReaderService ,IConfiguration configuration )
+        public ScheduleHandler(IExcelReaderService excelReaderService, IDataComparer dataComparer, IDatabaseReaderService databaseReaderService, IConfiguration configuration)
         {
             _excelReaderService = excelReaderService;
             _dataComparer = dataComparer;
             _databaseReaderService = databaseReaderService;
             _connectionString = configuration.GetConnectionString("Default");
+            _configuration = configuration;
         }
 
         public async Task ProcessAsync()
@@ -32,11 +37,23 @@ namespace CronAbsence.Api.Service
             {
                 Console.WriteLine("Processing started...");
 
-                // CSV file path
-                string csvFilePath = "C:/Users/Anas.HAMRAOUI/Downloads/TestFiles/dummyFile.csv";
+                // FTP server details
+                string ftpHost = _configuration["FTPServer:Host"]; // localhost
+                string ftpPort = _configuration["FTPServer:Port"]; // 21
+                string ftpUserName = _configuration["FTPServer:User"]; // user01
+                string ftpPassword = _configuration["FTPServer:Password"]; // 1234
+                string fileName = "dummyFile.csv";
 
-                // Read data from CSV file
-                var csvData = await _excelReaderService.ReadDataAsync(csvFilePath);
+                // File paths
+                string localDownloadPath = Path.Combine(Path.GetTempPath(), fileName); // Temp folder for downloading
+                string localArchivePath = Path.Combine(_configuration["FTPServer:DestinationFolderPath"], fileName); // Archive folder after processing
+                string localOriginalPath = Path.Combine(_configuration["FTPServer:SourceFolderPath"], fileName); // Original folder before processing
+
+                // Download file from FTP server
+                await DownloadFileFromFtp(ftpHost, ftpPort, ftpUserName, ftpPassword, fileName, localDownloadPath);
+
+                // Read data from downloaded CSV file
+                var csvData = await _excelReaderService.ReadDataAsync(localDownloadPath);
 
                 // Convert CSV DataTable to CatAbsence list
                 var fileAbsences = ConvertDataTableToCatAbsenceList(csvData);
@@ -53,15 +70,30 @@ namespace CronAbsence.Api.Service
                 await _dataComparer.UpdateExistingAbsence(dbAbsence, fileAbsences);
                 await _dataComparer.CancelDeletedAbsence(dbAbsence, fileAbsences);
 
-                // archivage
-
-                // PPM Api
+                // Move the file to the archive folder
+                File.Move(localOriginalPath, localArchivePath);
 
                 Console.WriteLine("Processing completed successfully.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        private async Task DownloadFileFromFtp(string ftpHost, string ftpPort, string ftpUserName, string ftpPassword, string fileName, string localFilePath)
+        {
+            string ftpFilePath = $"ftp://{ftpHost}:{ftpPort}/{fileName}";
+
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpFilePath);
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+            request.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+
+            using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+            using (Stream responseStream = response.GetResponseStream())
+            using (FileStream fileStream = File.Create(localFilePath))
+            {
+                responseStream.CopyTo(fileStream);
             }
         }
 
@@ -92,14 +124,13 @@ namespace CronAbsence.Api.Service
                     Debut = row["Debut"].ToString(),
                     Fin = row["Fin"].ToString(),
                     Motif = row["Motif"].ToString().Equals("REPOS ASTREINTE", StringComparison.InvariantCultureIgnoreCase) ? "REPOS ASTREINTE" : "ABSENCE",
-                    
+                    Flag = 0 // Setting Flag to 0
                 };
 
                 catAbsences.Add(catAbsence);
             }
             return catAbsences;
         }
-
 
         private int ParseType(string nombreHeures)
         {
@@ -125,6 +156,5 @@ namespace CronAbsence.Api.Service
                 return maxId;
             }
         }
-
     }
 }
