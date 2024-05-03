@@ -22,7 +22,7 @@ namespace CronAbsence.Api.Schedule
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
+            try 
             {
                 _logger.LogInformation("ScheduleJobService is starting.");
 

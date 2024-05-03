@@ -38,7 +38,10 @@ namespace CronAbsence.Infrastructure.Service.Process
                 da.Motif == fa.Motif &&
                 da.Type != fa.Type))
                 .ToList();
-            
+
+            updatedRecords.ForEach(record => record.Debut = null);
+            updatedRecords.ForEach(record => record.Fin = null);
+
             await _databaseReaderService.UpdateCatAbsencesAsync(updatedRecords);
         }
 
@@ -49,8 +52,11 @@ namespace CronAbsence.Infrastructure.Service.Process
                 fa.Date == da.Date &&
                 fa.Motif == da.Motif))
                 .ToList();
-            
-            await _databaseReaderService.DeleteCatAbsencesAsync(deletedRecords);
+
+            // Set Type to 0 instead of deleting
+            deletedRecords.ForEach(record => record.Type = 0);
+
+            await _databaseReaderService.UpdateCatAbsencesAsync(deletedRecords);
         }
     }
 }
