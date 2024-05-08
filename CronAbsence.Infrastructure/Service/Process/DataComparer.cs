@@ -54,7 +54,11 @@ namespace CronAbsence.Infrastructure.Service.Process
                 .ToList();
 
             // Set Type to 0 instead of deleting
-            deletedRecords.ForEach(record => record.Type = 0);
+            deletedRecords.ForEach(record => { 
+                                        record.Type = 0;
+                                        record.Flag = 0;
+                                        });
+                                        
 
             await _databaseReaderService.UpdateCatAbsencesAsync(deletedRecords);
         }
