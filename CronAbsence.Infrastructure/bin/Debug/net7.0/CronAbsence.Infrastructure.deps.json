@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v7.0": {
       "CronAbsence.Infrastructure/1.0.0": {
         "dependencies": {
+          "CronAbsence.Application": "1.0.0",
           "CronAbsence.Domain": "1.0.0",
           "CsvHelper": "31.0.4",
           "Dapper": "2.1.35",
@@ -1801,6 +1802,14 @@
           "System.Threading.Tasks.Extensions": "4.5.4"
         }
       },
+      "CronAbsence.Application/1.0.0": {
+        "dependencies": {
+          "CronAbsence.Domain": "1.0.0"
+        },
+        "runtime": {
+          "CronAbsence.Application.dll": {}
+        }
+      },
       "CronAbsence.Domain/1.0.0": {
         "dependencies": {
           "EPPlus": "7.0.9"
@@ -2894,6 +2903,11 @@
       "sha512": "sha512-ZIiLPsf67YZ9zgr31vzrFaYQqxRPX9cVHjtPSnmx4eN6lbS/yEyYNr2vs1doGDEscF0tjCZFsk9yUg1sC9e8tg==",
       "path": "system.xml.readerwriter/4.0.11",
       "hashPath": "system.xml.readerwriter.4.0.11.nupkg.sha512"
+    },
+    "CronAbsence.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "CronAbsence.Domain/1.0.0": {
       "type": "project",

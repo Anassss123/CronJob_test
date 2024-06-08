@@ -12,6 +12,5 @@ namespace CronAbsence.Infrastructure.Service.Data
 
         Task UpdateCatAbsencesAsync(IEnumerable<CatAbsence> updatedAbsences);
 
-        Task DeleteCatAbsencesAsync(IEnumerable<CatAbsence> deletedAbsences);
     }
 }

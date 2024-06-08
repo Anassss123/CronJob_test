@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Net;
-using System.Threading.Tasks;
 using CronAbsence.Domain.Models;
 using CronAbsence.Infrastructure.Service.Data;
 using CronAbsence.Infrastructure.Service.Excel;
 using CronAbsence.Infrastructure.Service.Process;
 using Dapper;
-using Microsoft.Extensions.Configuration;
 
 namespace CronAbsence.Api.Service
 {
@@ -50,7 +45,7 @@ namespace CronAbsence.Api.Service
                 string localOriginalPath = Path.Combine(_configuration["FTPServer:SourceFolderPath"], fileName); // Original folder before processing
 
                 // Download file from FTP server
-                await DownloadFileFromFtp(ftpHost, ftpPort, ftpUserName, ftpPassword, fileName, localDownloadPath);
+                await DownloadFileFtp(ftpHost, ftpPort, ftpUserName, ftpPassword, fileName, localDownloadPath);
 
                 // Read data from downloaded CSV file
                 var csvData = await _excelReaderService.ReadDataAsync(localDownloadPath);
@@ -73,6 +68,9 @@ namespace CronAbsence.Api.Service
                 // Move the file to the archive folder
                 File.Move(localOriginalPath, localArchivePath);
 
+                // Call Api PPM 
+                
+
                 Console.WriteLine("Processing completed successfully.");
             }
             catch (Exception ex)
@@ -81,7 +79,7 @@ namespace CronAbsence.Api.Service
             }
         }
 
-        private async Task DownloadFileFromFtp(string ftpHost, string ftpPort, string ftpUserName, string ftpPassword, string fileName, string localFilePath)
+        private async Task DownloadFileFtp(string ftpHost, string ftpPort, string ftpUserName, string ftpPassword, string fileName, string localFilePath)
         {
             string ftpFilePath = $"ftp://{ftpHost}:{ftpPort}/{fileName}";
 

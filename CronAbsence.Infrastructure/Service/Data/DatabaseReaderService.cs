@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using CronAbsence.Domain.Models;
@@ -24,7 +20,7 @@ namespace CronAbsence.Infrastructure.Service.Data
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                return await connection.QueryAsync<CatAbsence>("SELECT * FROM Cat_absence");
+                return await connection.QueryAsync<CatAbsence>("[dbo].[ps_cat_absence_s_by_date]", commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -38,22 +34,19 @@ namespace CronAbsence.Infrastructure.Service.Data
                 await connection.OpenAsync();
                 foreach (var absence in newAbsences)
                 {
-                    await connection.ExecuteAsync(
-                        @"INSERT INTO Cat_absence (ID,Matricule, Nom, Prenom, Date, Type, Debut, Fin, Motif, Flag) 
-                          VALUES (@ID,@Matricule, @Nom, @Prenom, @Date, @Type, @Debut, @Fin, @Motif, @Flag)",
-                        new
-                        {
-                            absence.ID,
-                            absence.Matricule,
-                            absence.Nom,
-                            absence.Prenom,
-                            absence.Date,
-                            absence.Type,
-                            absence.Debut,
-                            absence.Fin,
-                            absence.Motif,
-                            absence.Flag
-                        });
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@ID", absence.ID);
+                    parameters.Add("@Matricule", absence.Matricule);
+                    parameters.Add("@Nom", absence.Nom);
+                    parameters.Add("@Prenom", absence.Prenom);
+                    parameters.Add("@Date", absence.Date);
+                    parameters.Add("@Type", absence.Type);
+                    parameters.Add("@Debut", absence.Debut);
+                    parameters.Add("@Fin", absence.Fin);
+                    parameters.Add("@Motif", absence.Motif);
+                    parameters.Add("@Flag", absence.Flag);
+
+                    await connection.ExecuteAsync("[dbo].[ps_cat_absence_i]", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
         }
@@ -68,49 +61,19 @@ namespace CronAbsence.Infrastructure.Service.Data
                 await connection.OpenAsync();
                 foreach (var absence in updatedAbsences)
                 {
-                    await connection.ExecuteAsync(
-                        @"UPDATE Cat_absence 
-                        SET Nom = @Nom, 
-                            Prenom = @Prenom, 
-                            Type = @Type, 
-                            Debut = @Debut, 
-                            Fin = @Fin, 
-                            Motif = @Motif, 
-                            Flag = @Flag,
-                            LastUpdated = @dateNow
-                        WHERE Matricule = @Matricule
-                        AND Date = @Date
-                        AND Motif = @Motif",
-                        new
-                        {
-                            absence.Nom,
-                            absence.Prenom,
-                            absence.Type,
-                            absence.Debut,
-                            absence.Fin,
-                            absence.Motif,
-                            absence.Flag,
-                            dateNow = DateTime.Now,
-                            absence.Matricule,
-                            absence.Date
-                        });
-                }
-            }
-        }
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Matricule", absence.Matricule);
+                    parameters.Add("@Nom", absence.Nom);
+                    parameters.Add("@Prenom", absence.Prenom);
+                    parameters.Add("@Date", absence.Date);
+                    parameters.Add("@Type", absence.Type);
+                    parameters.Add("@Debut", absence.Debut);
+                    parameters.Add("@Fin", absence.Fin);
+                    parameters.Add("@Motif", absence.Motif);
+                    parameters.Add("@Flag", absence.Flag);
+                    parameters.Add("@LastUpdated", DateTime.Now);
 
-        public async Task DeleteCatAbsencesAsync(IEnumerable<CatAbsence> deletedAbsences)
-        {
-            if (deletedAbsences == null || !deletedAbsences.Any())
-                return;
-
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                foreach (var absence in deletedAbsences)
-                {
-                    await connection.ExecuteAsync(
-                        "DELETE FROM Cat_absence WHERE Matricule = @Matricule",
-                        new { absence.Matricule });
+                    await connection.ExecuteAsync("[dbo].[ps_cat_absence_u]", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
         }
