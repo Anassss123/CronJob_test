@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CronAbsence.Domain.Interfaces;
 using CronAbsence.Domain.Models;
-using CronAbsence.Infrastructure.Service.Data;
 
 namespace CronAbsence.Infrastructure.Service.Process
 {

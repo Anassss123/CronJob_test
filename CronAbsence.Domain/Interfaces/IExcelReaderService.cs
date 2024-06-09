@@ -1,7 +1,7 @@
 using System.Data;
 using System.Threading.Tasks;
 
-namespace CronAbsence.Infrastructure.Service.Excel
+namespace CronAbsence.Domain.Interfaces
 {
     public interface IExcelReaderService
     {

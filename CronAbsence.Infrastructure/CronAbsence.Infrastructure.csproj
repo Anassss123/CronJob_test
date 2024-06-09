@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CronAbsence.Domain\CronAbsence.Domain.csproj" />
-    <ProjectReference Include="..\CronAbsence.Application\CronAbsence.Application.csproj" />
   </ItemGroup>
 
 </Project>

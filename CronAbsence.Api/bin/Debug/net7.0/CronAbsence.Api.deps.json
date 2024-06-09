@@ -1970,7 +1970,18 @@
       },
       "CronAbsence.Domain/1.0.0": {
         "dependencies": {
-          "EPPlus": "7.0.9"
+          "CsvHelper": "31.0.4",
+          "Dapper": "2.1.35",
+          "Dapper.SqlBuilder": "2.0.78",
+          "EPPlus": "7.0.9",
+          "FluentFTP": "50.0.1",
+          "Microsoft.Data.SqlClient": "5.2.0",
+          "Microsoft.EntityFrameworkCore": "7.0.16",
+          "Microsoft.EntityFrameworkCore.SqlServer": "7.0.16",
+          "Microsoft.Extensions.Hosting": "8.0.0",
+          "Microsoft.Graph": "5.44.0",
+          "SSH.NET": "2024.0.0",
+          "System.Data.SqlClient": "4.1.0"
         },
         "runtime": {
           "CronAbsence.Domain.dll": {}

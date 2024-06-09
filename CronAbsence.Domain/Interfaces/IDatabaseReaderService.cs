@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CronAbsence.Domain.Models;
 
-namespace CronAbsence.Infrastructure.Service.Data
+namespace CronAbsence.Domain.Interfaces
 {
     public interface IDatabaseReaderService
     {
@@ -11,6 +11,7 @@ namespace CronAbsence.Infrastructure.Service.Data
         Task InsertCatAbsencesAsync(IEnumerable<CatAbsence> newAbsences);
 
         Task UpdateCatAbsencesAsync(IEnumerable<CatAbsence> updatedAbsences);
+        int GetMaxIdFromDatabase();
 
     }
 }

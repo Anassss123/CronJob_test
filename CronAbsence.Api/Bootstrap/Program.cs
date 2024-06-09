@@ -13,6 +13,10 @@ using CronAbsence.Domain.Models;
 using CronAbsence.Infrastructure.Service.Data;
 using CronAbsence.Infrastructure.Service.Process;
 using System;
+using CronAbsence.Domain.Interfaces;
+using CronAbsence.Infrastructure.Interfaces;
+using CronAbsence.Api.Schedule.Interface;
+using CronAbsence.Domain.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +34,9 @@ builder.Services.AddScoped<IDatabaseReaderService, DatabaseReaderService>();
 builder.Services.AddScoped<IScheduleHandler, ScheduleHandler>();
 builder.Services.AddScoped<IExcelReaderService, ExcelReaderService>();
 builder.Services.AddScoped<IDataComparer, DataComparer>();
+builder.Services.AddScoped<IFtpService, FtpService>();
+builder.Services.AddScoped<ILoggerService, LoggerService>();
+builder.Services.AddScoped<IDataConverter, DataConverter>();
 
 // Add ScheduleJobService as a singleton
 builder.Services.AddSingleton<ScheduleJobService>(); 

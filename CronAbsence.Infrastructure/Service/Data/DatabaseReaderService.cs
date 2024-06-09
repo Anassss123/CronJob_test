@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using CronAbsence.Domain.Models;
 using Microsoft.Extensions.Configuration;
+using CronAbsence.Domain.Interfaces;
 
 namespace CronAbsence.Infrastructure.Service.Data
 {
@@ -75,6 +76,16 @@ namespace CronAbsence.Infrastructure.Service.Data
 
                     await connection.ExecuteAsync("[dbo].[ps_cat_absence_u]", parameters, commandType: CommandType.StoredProcedure);
                 }
+            }
+        }
+        public int GetMaxIdFromDatabase()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = "SELECT MAX(ID) FROM Cat_absence";
+                int maxId = connection.ExecuteScalar<int>(query);
+                return maxId;
             }
         }
     }

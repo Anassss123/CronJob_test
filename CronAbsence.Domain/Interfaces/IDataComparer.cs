@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CronAbsence.Domain.Models;
 
-namespace CronAbsence.Infrastructure.Service.Process
+namespace CronAbsence.Domain.Interfaces
 {
     public interface IDataComparer
     {

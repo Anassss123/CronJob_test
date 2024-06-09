@@ -15,5 +15,3 @@ C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.
 C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.csproj.CopyComplete
 C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\bin\Debug\net7.0\CronAbsence.Infrastructure.runtimeconfig.json
 C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\obj\Debug\net7.0\CronAbsence.Infrastructure.genruntimeconfig.cache
-C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\bin\Debug\net7.0\CronAbsence.Application.dll
-C:\Users\Anas.HAMRAOUI\OneDrive - Akkodis\Documents\PFE\CronAbsence\CronAbsence.Infrastructure\bin\Debug\net7.0\CronAbsence.Application.pdb

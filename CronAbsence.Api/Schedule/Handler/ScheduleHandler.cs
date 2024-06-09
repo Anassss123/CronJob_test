@@ -1,11 +1,15 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Net;
+using CronAbsence.Domain.Interfaces;
+using CronAbsence.Domain.Service;
 using CronAbsence.Domain.Models;
 using CronAbsence.Infrastructure.Service.Data;
 using CronAbsence.Infrastructure.Service.Excel;
 using CronAbsence.Infrastructure.Service.Process;
 using Dapper;
+using CronAbsence.Infrastructure.Interfaces;
+using CronAbsence.Api.Schedule.Interface;
 
 namespace CronAbsence.Api.Service
 {
@@ -16,14 +20,20 @@ namespace CronAbsence.Api.Service
         private readonly IDatabaseReaderService _databaseReaderService;
         private readonly string _connectionString;
         private readonly IConfiguration _configuration;
-
-        public ScheduleHandler(IExcelReaderService excelReaderService, IDataComparer dataComparer, IDatabaseReaderService databaseReaderService, IConfiguration configuration)
+        private readonly IFtpService _ftpService;
+        private readonly ILoggerService _loggerService;
+        private readonly IDataConverter _dataConverter;
+        
+        public ScheduleHandler(IExcelReaderService excelReaderService, IDataComparer dataComparer, IDatabaseReaderService databaseReaderService, IConfiguration configuration, IFtpService ftpService, ILoggerService loggerService, IDataConverter dataConverter)
         {
             _excelReaderService = excelReaderService;
             _dataComparer = dataComparer;
             _databaseReaderService = databaseReaderService;
             _connectionString = configuration.GetConnectionString("Default");
             _configuration = configuration;
+             _ftpService = ftpService;
+            _loggerService = loggerService;
+            _dataConverter = dataConverter;
         }
 
         public async Task ProcessAsync()
@@ -44,18 +54,13 @@ namespace CronAbsence.Api.Service
                 string localArchivePath = Path.Combine(_configuration["FTPServer:DestinationFolderPath"], fileName); // Archive folder after processing
                 string localOriginalPath = Path.Combine(_configuration["FTPServer:SourceFolderPath"], fileName); // Original folder before processing
 
-                // Download file from FTP server
-                await DownloadFileFtp(ftpHost, ftpPort, ftpUserName, ftpPassword, fileName, localDownloadPath);
+                await _ftpService.DownloadFileAsync(ftpHost, ftpPort, ftpUserName, ftpPassword, fileName, localDownloadPath);
 
-                // Read data from downloaded CSV file
                 var csvData = await _excelReaderService.ReadDataAsync(localDownloadPath);
 
-                // Convert CSV DataTable to CatAbsence list
-                var fileAbsences = ConvertDataTableToCatAbsenceList(csvData);
+                var fileAbsences = _dataConverter.ConvertDataTableToCatAbsenceList(csvData);
 
-                // Log the CSV data for verification
-                Console.WriteLine("CSV Data:");
-                LogCatAbsences(fileAbsences);
+                _loggerService.LogCatAbsences(fileAbsences);
 
                 // Get data from the database
                 var dbAbsence = await _databaseReaderService.GetCatAbsencesAsync();
@@ -76,82 +81,6 @@ namespace CronAbsence.Api.Service
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-        }
-
-        private async Task DownloadFileFtp(string ftpHost, string ftpPort, string ftpUserName, string ftpPassword, string fileName, string localFilePath)
-        {
-            string ftpFilePath = $"ftp://{ftpHost}:{ftpPort}/{fileName}";
-
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpFilePath);
-            request.Method = WebRequestMethods.Ftp.DownloadFile;
-            request.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
-
-            using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
-            using (Stream responseStream = response.GetResponseStream())
-            using (FileStream fileStream = File.Create(localFilePath))
-            {
-                responseStream.CopyTo(fileStream);
-            }
-        }
-
-        private void LogCatAbsences(IEnumerable<CatAbsence> catAbsences)
-        {
-            foreach (var absence in catAbsences)
-            {
-                Console.WriteLine($"Matricule: {absence.Matricule} | Nom: {absence.Nom} | Prenom: {absence.Prenom} | Date: {absence.Date} | Type: {absence.Type} | Debut: {absence.Debut} | Fin: {absence.Fin} | Motif: {absence.Motif} | Flag: {absence.Flag}");
-            }
-        }
-
-        private List<CatAbsence> ConvertDataTableToCatAbsenceList(DataTable dataTable)
-        {
-            var catAbsences = new List<CatAbsence>();
-            int maxId = GetMaxIdFromDatabase(); // Start ID counter from 1
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                maxId++;
-                var catAbsence = new CatAbsence
-                {
-                    ID = maxId,
-                    Matricule = Convert.ToInt32(row["Matricule"]),
-                    Nom = row["Nom"].ToString(),
-                    Prenom = row["Prenom"].ToString(),
-                    Date = DateTime.ParseExact(row["Date"].ToString(), "dd/MM/yyyy", null),
-                    Type = ParseType(row["Nombre Heures"].ToString()), 
-                    Debut = row["Debut"].ToString(),
-                    Fin = row["Fin"].ToString(),
-                    Motif = row["Motif"].ToString().Equals("REPOS ASTREINTE", StringComparison.InvariantCultureIgnoreCase) ? "REPOS ASTREINTE" : "ABSENCE",
-                    Flag = 0 // Setting Flag to 0
-                };
-
-                catAbsences.Add(catAbsence);
-            }
-            return catAbsences;
-        }
-
-        private int ParseType(string nombreHeures)
-        {
-            // Logic to parse "Nombre Heures" to Type
-            
-            if (nombreHeures.StartsWith("J"))
-                return 3;
-            else if (nombreHeures.StartsWith("M"))
-                return 1;
-            else if (nombreHeures.StartsWith("A"))
-                return 2;
-             else
-                throw new ArgumentException("Invalid value for Nombre Heures");// Other values 
-        }
-
-        private int GetMaxIdFromDatabase()
-        {
-            using (var connection = new SqlConnection(_connectionString)) // Use your connection string
-            {
-                connection.Open();
-                string query = "SELECT MAX(ID) FROM Cat_absence";
-                int maxId = connection.ExecuteScalar<int>(query);
-                return maxId;
             }
         }
     }
