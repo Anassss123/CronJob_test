@@ -1,5 +1,4 @@
 using System.Data;
-using System.Threading.Tasks;
 
 namespace CronAbsence.Domain.Interfaces
 {

@@ -1,13 +1,4 @@
-using System.Data;
-using System.Data.SqlClient;
-using System.Net;
 using CronAbsence.Domain.Interfaces;
-using CronAbsence.Domain.Service;
-using CronAbsence.Domain.Models;
-using CronAbsence.Infrastructure.Service.Data;
-using CronAbsence.Infrastructure.Service.Excel;
-using CronAbsence.Infrastructure.Service.Process;
-using Dapper;
 using CronAbsence.Infrastructure.Interfaces;
 using CronAbsence.Api.Schedule.Interface;
 
@@ -17,21 +8,23 @@ namespace CronAbsence.Api.Service
     {
         private readonly IExcelReaderService _excelReaderService;
         private readonly IDataComparer _dataComparer;
-        private readonly IDatabaseReaderService _databaseReaderService;
-        private readonly string _connectionString;
-        private readonly IConfiguration _configuration;
-        private readonly IFtpService _ftpService;
+        private readonly IPilotageRepository _PilotageRepository;
+        private readonly IFTPProvider _ftpProvider;
         private readonly ILoggerService _loggerService;
         private readonly IDataConverter _dataConverter;
-        
-        public ScheduleHandler(IExcelReaderService excelReaderService, IDataComparer dataComparer, IDatabaseReaderService databaseReaderService, IConfiguration configuration, IFtpService ftpService, ILoggerService loggerService, IDataConverter dataConverter)
+
+        public ScheduleHandler(
+            IExcelReaderService excelReaderService,
+            IDataComparer dataComparer,
+            IPilotageRepository PilotageRepository,
+            IFTPProvider ftpProvider,
+            ILoggerService loggerService,
+            IDataConverter dataConverter)
         {
             _excelReaderService = excelReaderService;
             _dataComparer = dataComparer;
-            _databaseReaderService = databaseReaderService;
-            _connectionString = configuration.GetConnectionString("Default");
-            _configuration = configuration;
-             _ftpService = ftpService;
+            _PilotageRepository = PilotageRepository;
+            _ftpProvider = ftpProvider;
             _loggerService = loggerService;
             _dataConverter = dataConverter;
         }
@@ -42,19 +35,14 @@ namespace CronAbsence.Api.Service
             {
                 Console.WriteLine("Processing started...");
 
-                // FTP server details
-                string ftpHost = _configuration["FTPServer:Host"]; // localhost
-                string ftpPort = _configuration["FTPServer:Port"]; // 21
-                string ftpUserName = _configuration["FTPServer:User"]; // user01
-                string ftpPassword = _configuration["FTPServer:Password"]; // 1234
                 string fileName = "dummyFile.csv";
 
-                // File paths
-                string localDownloadPath = Path.Combine(Path.GetTempPath(), fileName); // Temp folder for downloading
-                string localArchivePath = Path.Combine(_configuration["FTPServer:DestinationFolderPath"], fileName); // Archive folder after processing
-                string localOriginalPath = Path.Combine(_configuration["FTPServer:SourceFolderPath"], fileName); // Original folder before processing
+                // Use FTPProvider to get file paths
+                string localDownloadPath = _ftpProvider.GetLocalDownloadPath(fileName);
+                string localArchivePath = _ftpProvider.GetLocalArchivePath(fileName);
+                string localOriginalPath = _ftpProvider.GetLocalOriginalPath(fileName);
 
-                await _ftpService.DownloadFileAsync(ftpHost, ftpPort, ftpUserName, ftpPassword, fileName, localDownloadPath);
+                await _ftpProvider.DownloadFileAsync(fileName, localDownloadPath);
 
                 var csvData = await _excelReaderService.ReadDataAsync(localDownloadPath);
 
@@ -63,7 +51,7 @@ namespace CronAbsence.Api.Service
                 _loggerService.LogCatAbsences(fileAbsences);
 
                 // Get data from the database
-                var dbAbsence = await _databaseReaderService.GetCatAbsencesAsync();
+                var dbAbsence = await _PilotageRepository.GetCatAbsencesAsync();
 
                 // Compare data and perform operations
                 await _dataComparer.InsertNewAbsence(dbAbsence, fileAbsences);
@@ -72,9 +60,6 @@ namespace CronAbsence.Api.Service
 
                 // Move the file to the archive folder
                 File.Move(localOriginalPath, localArchivePath);
-
-                // Call Api PPM 
-                
 
                 Console.WriteLine("Processing completed successfully.");
             }

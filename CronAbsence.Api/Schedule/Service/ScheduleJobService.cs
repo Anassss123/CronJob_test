@@ -1,11 +1,4 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using CronAbsence.Api.Service;
-using CronAbsence.Infrastructure.Service.Data;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace CronAbsence.Api.Schedule
 {

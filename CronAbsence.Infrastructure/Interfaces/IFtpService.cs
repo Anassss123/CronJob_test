@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CronAbsence.Infrastructure.Interfaces
 {
-    public interface IFtpService
+    public interface IFTPProvider
     {
-        Task DownloadFileAsync(string ftpHost, string ftpPort, string ftpUserName, string ftpPassword, string fileName, string localFilePath);
+        Task DownloadFileAsync(string fileName, string localFilePath);
+        string GetLocalDownloadPath(string fileName);
+        string GetLocalArchivePath(string fileName);
+        string GetLocalOriginalPath(string fileName);
     }
 }

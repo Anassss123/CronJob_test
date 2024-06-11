@@ -7,11 +7,11 @@ using CronAbsence.Domain.Interfaces;
 
 namespace CronAbsence.Infrastructure.Service.Data
 {
-    public class DatabaseReaderService : IDatabaseReaderService
+    public class PilotageRepository : IPilotageRepository
     {
         private readonly string _connectionString;
 
-        public DatabaseReaderService(IConfiguration configuration)
+        public PilotageRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("Default");
         }

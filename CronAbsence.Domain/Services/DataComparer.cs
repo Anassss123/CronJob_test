@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CronAbsence.Domain.Interfaces;
 using CronAbsence.Domain.Models;
 
@@ -9,11 +5,11 @@ namespace CronAbsence.Infrastructure.Service.Process
 {
     public class DataComparer : IDataComparer
     {
-        private readonly IDatabaseReaderService _databaseReaderService;
+        private readonly IPilotageRepository _PilotageRepository;
 
-        public DataComparer(IDatabaseReaderService databaseReaderService)
+        public DataComparer(IPilotageRepository PilotageRepository)
         {
-            _databaseReaderService = databaseReaderService;
+            _PilotageRepository = PilotageRepository;
         }
 
         public async Task InsertNewAbsence(IEnumerable<CatAbsence> dbAbsence, IEnumerable<CatAbsence> fileAbsence)
@@ -27,7 +23,7 @@ namespace CronAbsence.Infrastructure.Service.Process
             newRecords.ForEach(record => record.Debut = null);
             newRecords.ForEach(record => record.Fin = null);
 
-            await _databaseReaderService.InsertCatAbsencesAsync(newRecords);
+            await _PilotageRepository.InsertCatAbsencesAsync(newRecords);
         }
 
         public async Task UpdateExistingAbsence(IEnumerable<CatAbsence> dbAbsence, IEnumerable<CatAbsence> fileAbsence)
@@ -42,7 +38,7 @@ namespace CronAbsence.Infrastructure.Service.Process
             updatedRecords.ForEach(record => record.Debut = null);
             updatedRecords.ForEach(record => record.Fin = null);
 
-            await _databaseReaderService.UpdateCatAbsencesAsync(updatedRecords);
+            await _PilotageRepository.UpdateCatAbsencesAsync(updatedRecords);
         }
 
         public async Task CancelDeletedAbsence(IEnumerable<CatAbsence> dbAbsence, IEnumerable<CatAbsence> fileAbsence)
@@ -60,7 +56,7 @@ namespace CronAbsence.Infrastructure.Service.Process
                                         });
                                         
 
-            await _databaseReaderService.UpdateCatAbsencesAsync(deletedRecords);
+            await _PilotageRepository.UpdateCatAbsencesAsync(deletedRecords);
         }
     }
 }

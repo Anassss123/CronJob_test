@@ -1,10 +1,4 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using CronAbsence.Infrastructure.Configuration;
 using CronAbsence.Api.Service;
 using CronAbsence.Infrastructure.Service.Excel;
@@ -12,7 +6,6 @@ using CronAbsence.Api.Schedule;
 using CronAbsence.Domain.Models;
 using CronAbsence.Infrastructure.Service.Data;
 using CronAbsence.Infrastructure.Service.Process;
-using System;
 using CronAbsence.Domain.Interfaces;
 using CronAbsence.Infrastructure.Interfaces;
 using CronAbsence.Api.Schedule.Interface;
@@ -25,16 +18,19 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddLogging();
 
+//FTPConfiguration
+builder.Services.Configure<FtpOptions>(builder.Configuration.GetSection("FTPServer"));
+
 // Add DbContext
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 // Add scoped services
-builder.Services.AddScoped<IDatabaseReaderService, DatabaseReaderService>();
+builder.Services.AddScoped<IPilotageRepository, PilotageRepository>();
 builder.Services.AddScoped<IScheduleHandler, ScheduleHandler>();
 builder.Services.AddScoped<IExcelReaderService, ExcelReaderService>();
 builder.Services.AddScoped<IDataComparer, DataComparer>();
-builder.Services.AddScoped<IFtpService, FtpService>();
+builder.Services.AddScoped<IFTPProvider, FTPProvider>();
 builder.Services.AddScoped<ILoggerService, LoggerService>();
 builder.Services.AddScoped<IDataConverter, DataConverter>();
 

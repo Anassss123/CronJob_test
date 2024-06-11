@@ -1,22 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
 using System.Net;
-using System.Threading.Tasks;
+using CronAbsence.Domain.Models;
 using CronAbsence.Infrastructure.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace CronAbsence.Api.Service
 {
-    public class FtpService : IFtpService
+    public class FTPProvider : IFTPProvider
     {
-        public async Task DownloadFileAsync(string ftpHost, string ftpPort, string ftpUserName, string ftpPassword, string fileName, string localFilePath)
+        private readonly FtpOptions _ftpOptions;
+
+        public FTPProvider(IOptions<FtpOptions> ftpOptions)
         {
-            string ftpFilePath = $"ftp://{ftpHost}:{ftpPort}/{fileName}";
+            _ftpOptions = ftpOptions.Value;
+        }
+
+        public async Task DownloadFileAsync(string fileName, string localFilePath)
+        {
+            string ftpFilePath = $"ftp://{_ftpOptions.Host}:{_ftpOptions.Port}/{fileName}";
 
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpFilePath);
             request.Method = WebRequestMethods.Ftp.DownloadFile;
-            request.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+            request.Credentials = new NetworkCredential(_ftpOptions.User, _ftpOptions.Password);
 
             using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
             using (Stream responseStream = response.GetResponseStream())
@@ -24,6 +28,21 @@ namespace CronAbsence.Api.Service
             {
                 responseStream.CopyTo(fileStream);
             }
+        }
+
+        public string GetLocalDownloadPath(string fileName)
+        {
+            return Path.Combine(Path.GetTempPath(), fileName);
+        }
+
+        public string GetLocalArchivePath(string fileName)
+        {
+            return Path.Combine(_ftpOptions.DestinationFolderPath, fileName);
+        }
+
+        public string GetLocalOriginalPath(string fileName)
+        {
+            return Path.Combine(_ftpOptions.SourceFolderPath, fileName);
         }
     }
 }

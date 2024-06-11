@@ -1,24 +1,23 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
 using CronAbsence.Domain.Interfaces;
 using CronAbsence.Domain.Models;
+
 
 namespace CronAbsence.Domain.Service
 {
     public class DataConverter : IDataConverter
     {
-        private readonly IDatabaseReaderService _databaseReaderService;
+        private readonly IPilotageRepository _PilotageRepository;
 
-        public DataConverter(IDatabaseReaderService databaseReaderService)
+        public DataConverter(IPilotageRepository PilotageRepository)
         {
-            _databaseReaderService = databaseReaderService;
+            _PilotageRepository = PilotageRepository;
         }
 
         public List<CatAbsence> ConvertDataTableToCatAbsenceList(DataTable dataTable)
         {
             var catAbsences = new List<CatAbsence>();
-            int maxId = _databaseReaderService.GetMaxIdFromDatabase();
+            int maxId = _PilotageRepository.GetMaxIdFromDatabase();
 
             foreach (DataRow row in dataTable.Rows)
             {

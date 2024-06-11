@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using CronAbsence.Domain.Models;
 
 namespace CronAbsence.Domain.Interfaces
 {
-    public interface IDatabaseReaderService
+    public interface IPilotageRepository
     {
         Task<IEnumerable<CatAbsence>> GetCatAbsencesAsync();
 
