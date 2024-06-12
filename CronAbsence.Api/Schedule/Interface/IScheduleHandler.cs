@@ -1,4 +1,4 @@
-namespace CronAbsence.Api.Service
+namespace CronAbsence.Api.Schedule.Interface
 {
     public interface IScheduleHandler
     {

@@ -1,16 +1,17 @@
 using CronAbsence.Api.Service;
+using CronAbsence.Api.Schedule.Interface;
 
 namespace CronAbsence.Api.Schedule
 {
     public class ScheduleJobService : BackgroundService
     {
         private readonly ILogger<ScheduleJobService> _logger;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public ScheduleJobService(ILogger<ScheduleJobService> logger, IServiceProvider serviceProvider)
+        public ScheduleJobService(ILogger<ScheduleJobService> logger, IServiceScopeFactory serviceScopeFactory)
         {
             _logger = logger;
-            _serviceProvider = serviceProvider;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -19,7 +20,7 @@ namespace CronAbsence.Api.Schedule
             {
                 _logger.LogInformation("ScheduleJobService is starting.");
 
-                using (var scope = _serviceProvider.CreateScope())
+                using (var scope = _serviceScopeFactory.CreateScope())
                 {
                     var scheduleHandler = scope.ServiceProvider.GetRequiredService<IScheduleHandler>();
                     await scheduleHandler.ProcessAsync();
