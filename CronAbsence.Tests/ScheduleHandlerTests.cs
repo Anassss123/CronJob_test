@@ -32,8 +32,8 @@ namespace CronAbsence.Tests
             _mockFtpProvider = new Mock<IFTPProvider>();
             _mockLoggerService = new Mock<ILoggerService>();
             _mockDataConverter = new Mock<IDataConverter>();
-
             _scheduleHandler = new ScheduleHandler(
+                
                 _mockExcelReaderService.Object,
                 _mockDataComparer.Object,
                 _mockPilotageRepository.Object,

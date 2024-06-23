@@ -1,4 +1,3 @@
-using CronAbsence.Api.Service;
 using CronAbsence.Api.Schedule.Interface;
 
 namespace CronAbsence.Api.Schedule

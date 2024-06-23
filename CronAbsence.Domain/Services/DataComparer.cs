@@ -49,7 +49,7 @@ namespace CronAbsence.Infrastructure.Service.Process
                 fa.Motif == da.Motif))
                 .ToList();
 
-            // Set Type to 0 instead of deleting
+            // Set Type to 0 to indicate that's been deleted
             deletedRecords.ForEach(record => { 
                                         record.Type = 0;
                                         record.Flag = 0;
